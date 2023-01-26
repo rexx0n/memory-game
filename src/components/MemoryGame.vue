@@ -78,7 +78,7 @@ export default {
       this.value = ''
       this.valueTwo = ''
       this.pole = generatePole(this.size)
-      this.open = Array.apply(null, {length: this.size}).map(() => false)
+      this.open = Array(this.size).fill(false)
       this.end = false
       this.start = false
       this.howTime()
