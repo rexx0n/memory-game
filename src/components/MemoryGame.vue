@@ -15,9 +15,7 @@
     <div class="menu">
       <p>Осталось время {{currentTime}}</p>
       <select @change="onChange" v-model="size">
-        <option :value="6">Easy</option>
-        <option :value="18">Medium</option>
-        <option :value="36">Hard</option>
+        <option v-for="(level) in levels" :key="level.size" :value="level.size">Size: {{level.size}}</option>
       </select>
       <button @click="reset">Заново</button>
 
@@ -33,20 +31,23 @@ export default {
   name: 'MemoryGame',
   data() {
     return {
-      size: 6,
       pole: [],
       value: '',
       valueTwo: '',
       open: [],
       timer: null,
-      currentTime: 10,
+      currentTime:null,
       end:false,
       start: false,
+      levels: [{time:6 ,size: 6,}, {time:30 ,size: 18,}, {time:100 ,size: 36,}],
+      size:null,
     }
   },
   mounted() {
+    this.currentTime = this.levels[0].time
+    this.size = this.levels[0].size
     this.reset()
-    this.howTime()
+
   },
   unmounted() {
     this.stopTimer()
@@ -65,14 +66,10 @@ export default {
       clearTimeout(this.timer)
     },
     howTime () {
-      if (this.size === 6) {
-        this.currentTime = 10
-      } else if(this.size === 18) {
-        this.currentTime = 40
-      }
-      else {
-        this.currentTime = 120
-      }
+     let current = this.levels.find((item) => {
+        return item.size === this.size;
+      })
+      this.currentTime = current.time
     },
     reset() {
       this.value = ''
@@ -214,9 +211,26 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   max-width: 700px;
-  margin-left: 72px;
+  margin-left: 143px;
 }
-
+select {
+  padding: 5px;
+  border-radius: 20px;
+}
+button {
+  margin-top: 5px;
+  border:1px solid #CCB494;
+  color: white;
+  box-shadow: 0 0 40px 40px #d2c2ac inset, 0 0 0 0 #3498db;
+  -webkit-transition: all 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
+  border-radius: 50px;
+  padding: 10px;
+}
+button:hover {
+  box-shadow: 0 0 10px 0 #d2c2ac inset, 0 0 10px 4px #d2c2ac;
+  color: black;
+}
 
 @media screen and (max-width: 834px) {
   .flex {
@@ -236,8 +250,12 @@ export default {
     max-width: 291px;
   }
 }
-
-@media screen and (max-width: 418px) {
+@media screen and (max-width: 480px) {
+  .flex {
+    margin-left: 100px;
+  }
+}
+@media screen and (max-width: 437px) {
   .item {
     min-width: 61px;
     min-height: 61px;
@@ -253,7 +271,6 @@ export default {
   .menu {
     gap: 5px;
   }
-
   .flex {
     margin-left: 0;
     max-width: 275px;
